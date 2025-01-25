@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link href="css.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div id="Body">
+    <div id="Services">
+      <div class="header">
+        <h1 class="Title"></h1>
+        <div class="header-actions">
+          <button class="btn btn-primary Add">
+            <i class="fas fa-user-plus"></i>
+            Adicionar Membro
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-title">
+            <i class="fas fa-users"></i>
+            Total de Membros
+          </div>
+          <div class="stat-value" id="total-members">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">
+            <i style="color: green" class="fas fa-circle text-success"></i>
+            Membros Online
+          </div>
+          <div class="stat-value" id="online-members">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">
+            <i class="fas fa-user-shield"></i>
+            Administradores
+          </div>
+          <div class="stat-value" id="admin-count">0</div>
+        </div>
+      </div>
+
+      <div id="Content">
+        <div class="search-bar">
+          <div class="search-input">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Pesquisar por ID ou nome..." id="search-input">
+          </div>
+          <div class="filter-dropdown">
+            <button class="filter-btn">
+              <i class="fas fa-filter"></i>
+              Filtrar
+            </button>
+          </div>
+        </div>
+
+        <table class="members-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Hierarquia</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="members-list">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="ConfirmModal" class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fas fa-exclamation-triangle text-warning"></i>
+          Confirmar Remoção
+        </h2>
+        <p class="modal-subtitle">Esta ação não pode ser desfeita.</p>
+      </div>
+
+      <div class="confirm-content">
+        <p>Tem certeza que deseja remover este membro da organização?</p>
+        <div class="member-preview">
+          <div class="member-preview-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="member-preview-info">
+            <span class="member-preview-id"></span>
+            <span class="member-preview-name"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="CancelRemove">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button class="btn btn-danger" id="ConfirmRemove">
+          <i class="fas fa-trash"></i>
+          Remover
+        </button>
+      </div>
+    </div>
+
+    <div id="Modal" class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fas fa-user-plus"></i>
+          Adicionar Novo Membro
+        </h2>
+        <p class="modal-subtitle">Preencha os dados abaixo para adicionar um novo membro à organização.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Passaporte</label>
+        <input type="number" class="form-input Input" placeholder="Digite o passaporte" maxlength="9">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hierarquia</label>
+        <select class="form-input Hiera">
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="Cancel">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button class="btn btn-primary" id="Save">
+          <i class="fas fa-check"></i>
+          Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery.js"></script>
+</body>
+</html>
