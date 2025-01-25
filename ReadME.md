@@ -2,7 +2,7 @@
 
 Este é um **painel standalone** para gerenciamento de membros em organizações dentro do FiveM. O painel apresenta um visual moderno, é fácil de usar e completamente configurável pelo arquivo `controller.lua`.
 
-![Painel de Gerenciamento de Membros]
+## **Painel de Gerenciamento de Membros**
 
 ---
 
