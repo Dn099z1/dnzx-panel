@@ -8,6 +8,18 @@ Controller = {
         TriggerClientEvent("Notify", source, css, message, title, time)
     end,
 
+    RemovePermission = function(Passport,Permission)
+        return vRP.RemovePermission(Passport,Permission)
+    end,
+
+    UpdateHierarchy = function(Passport,Permission)
+        return vRP.UpdateHierarchy(Passport,Permission)
+    end,
+
+    DowngradeHierarchy = function(Passport,Permission)
+        return vRP.DowngradeHierarchy(Passport,Permission)
+    end,
+
     ServiceToggle = function(source,Passport,Service)
         if Passport then
            return vRP.ServiceToggle(source, Passport, Service, false)
