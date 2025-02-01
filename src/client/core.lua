@@ -9,10 +9,10 @@ vSERVER = Tunnel.getInterface("panel")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SERVICE:TOGGLE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("service:Toggle")
-AddEventHandler("service:Toggle", function(Service)
-	TriggerServerEvent("service:Toggle", List[Service][2])
-end)
+-- RegisterNetEvent("service:Toggle")
+-- AddEventHandler("service:Toggle", function(Service)
+-- 	TriggerServerEvent("service:Toggle", List[Service][2])
+-- end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SERVICE:OPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -42,7 +42,8 @@ end)
 -- REMOVE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Remove", function(Data, Callback)
-	TriggerServerEvent("service:Remove", Data["passport"])
+	--print(json.encode(Data))
+	TriggerServerEvent("panel:Remove", Data["passport"])
 
 	Callback("Ok")
 end)
@@ -50,7 +51,7 @@ end)
 -- ADD
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Add", function(Data, Callback)
-	print(json.encode(Data))
+	--print(json.encode(Data))
 	TriggerServerEvent("service:Add", Data["passport"], Data["hierarchy"])
 
 	Callback("Ok")
@@ -72,6 +73,7 @@ end)
 -- UPDATEHIERARCHY
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("UpdateHierarchy", function(data, cb)
+	print(json.encode(data))
 	TriggerServerEvent("service:UpdateHierarchy", data)
 	cb("ok")
 end)

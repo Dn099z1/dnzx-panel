@@ -4,16 +4,6 @@ $(document).ready(function () {
 		$.post("http://panel/closeSystem");
 	  }
 	};
-
-	$("#search-input").on("input", function() {
-	  const searchTerm = $(this).val().toLowerCase();
-	  $("#members-list tr").each(function() {
-		const id = $(this).find("td:first").text().toLowerCase();
-		const name = $(this).find("td:nth-child(2)").text().toLowerCase();
-		const matches = id.includes(searchTerm) || name.includes(searchTerm);
-		$(this).toggle(matches);
-	  });
-	});
   });
   
   window.addEventListener("message", function (event) {
@@ -37,20 +27,20 @@ $(document).ready(function () {
   const Groups = () => {
 	$.post("http://panel/Request", "", (data) => {
 	  const List = data["Result"].sort((a, b) => (a["Passport"] > b["Passport"]) ? 1 : -1);
+	  
+	  // Update stats
 	  $("#total-members").text(List.length);
 	  $("#online-members").text(List.filter(item => item["Status"]).length);
-	  $("#admin-count").text(List.filter(item => item["Hierarchy"] = `Chefe`).length);
-
+	  $("#admin-count").text(List.filter(item => item["Hierarchy"] == `Chefe`).length);
   
 	  $("#members-list").html(`
 		${List.map((item) => {
-		  const initials = item["Name"].split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 		  return `
 			<tr class="member-row">
 			  <td>${item["Passport"]}</td>
 			  <td>
 				<div class="member-name">
-				  <div class="member-avatar">${initials}</div>
+				  <img src="${item["Avatar"]}" alt="${item["Hierarchy"]}" class="member-avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(item["Name"])}&background=3b82f6&color=fff'"/>
 				  ${item["Name"]}
 				</div>
 			  </td>
@@ -89,7 +79,7 @@ $(document).ready(function () {
 	const name = row.find('.member-name').text().trim();
 	
 	memberToRemove = { passport, name };
-
+	
 	$('.member-preview-id').text(`ID: ${passport}`);
 	$('.member-preview-name').text(name);
 	
@@ -119,36 +109,30 @@ $(document).ready(function () {
   });
   
   $(document).on("click", "#Save", function(e) {
-	const passport = $(".Input").val();
-	const hierarchy = $(".Hiera").val();
-  
-	if (!passport || !hierarchy) {
-	  alert("Por favor, preencha todos os campos.");
-	  return;
-	}
-  
 	$("#Modal").css("display", "none");
-	$.post("http://panel/Add", JSON.stringify({ passport, hierarchy }));
+	$.post("http://panel/Add", JSON.stringify({ passport: $(".Input").val(), hierarchy: $(".Hiera").val() }));
   });
   
   $(document).on("click", ".promote-btn", function(e) {
 	const passport = $(this).data("passport");
-	const currentHierarchy = parseInt($(this).data("hierarchy"));
-	const newHierarchy = currentHierarchy + 1;
+	const currentHierarchy = $(this).data("hierarchy");
+	const newHierarchy = currentHierarchy;
 	
 	$.post("http://panel/UpdateHierarchy", JSON.stringify({ 
 	  passport: passport, 
+	  downgrade : 0,
 	  hierarchy: newHierarchy 
 	}));
   });
   
   $(document).on("click", ".demote-btn", function(e) {
 	const passport = $(this).data("passport");
-	const currentHierarchy = parseInt($(this).data("hierarchy"));
+	const currentHierarchy = $(this).data("hierarchy");
 	const newHierarchy = Math.max(1, currentHierarchy - 1);
 	
 	$.post("http://panel/UpdateHierarchy", JSON.stringify({ 
 	  passport: passport, 
+	  downgrade : 1,
 	  hierarchy: newHierarchy 
 	}));
   });

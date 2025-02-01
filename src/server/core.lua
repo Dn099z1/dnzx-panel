@@ -16,12 +16,12 @@ local Panel = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SERVICE:TOGGLE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("service:Toggle")
-AddEventHandler("service:Toggle", function(Service)
-	local source = source
-	local Passport = Controller.GetIdentifier(source)
-	Controller.ServiceToggle(source,Passport,Service)
-end)
+-- RegisterServerEvent("service:Toggle")
+-- AddEventHandler("service:Toggle", function(Service)
+-- 	local source = source
+-- 	local Passport = Controller.GetIdentifier(source)
+-- 	Controller.ServiceToggle(source,Passport,Service)
+-- end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PAINEL
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ function Quantum.Request()
 		for Number, v in pairs(Entitys) do
 			local Number = parseInt(Number)
 			local Identity = Controller.Data(Number)
-
+			local Avatar = Identity["Avatar"]
 			if Identity then
 				local hierarchyName = Controller.Hierarchy(Panel[Passport])[Controller.GetUserHierarchy(Number, Panel[Passport])]
 
@@ -60,6 +60,7 @@ function Quantum.Request()
 					["Status"] = Sources[Number],
 					["Passport"] = Number,
 					["Hierarchy"] = hierarchyName,
+					["Avatar"] = Avatar,
 				}
 			end
 		end
@@ -75,10 +76,11 @@ AddEventHandler("panel:Remove", function(Number)
 	local source = source
 	local Number = parseInt(Number)
 	local Passport = Controller.GetIdentifier(source)
-	if Passport and Panel[Passport] and Number > 1 and Passport ~= Number then
-		if Controller.HasPermission(Passport, Panel[Passport], 1) then
-			Controller.RemovePermission(Number, Panel[Passport])
 
+	if Passport and Panel[Passport] then
+		
+		if Controller.HasPermission(Passport, Panel[Passport], 1) then
+			vRP.RemovePermission(Number, Panel[Passport])
 			Controller.Notify("amarelo", "Passaporte removido.", "Atenção", 5000)
 			TriggerClientEvent("panel:Update", source)
 		end
@@ -89,14 +91,14 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("service:Add")
 AddEventHandler("service:Add", function(Number,Hierarchy)
-	print(Hierarchy)
+	--print(Hierarchy)
 	local source = source
 	local Number = parseInt(Number)
 	local Hierarchy = parseInt(Hierarchy)
 	local Passport = Controller.GetIdentifier(source)
-	if Passport and Panel[Passport] and Number > 1 and Hierarchy > 1 and Passport ~= Number and Controller.Data(Number) then
+	if Passport and Panel[Passport] then
 		if Controller.HasPermission(Passport, Panel[Passport], 1) then
-			print(Panel[Passport])
+			--print(Panel[Passport])
 			Controller.GivePermission(Number, Panel[Passport], Hierarchy)
 
 			Controller.Notify( "verde", "Passaporte adicionado.", "Sucesso" ,5000)
@@ -114,12 +116,14 @@ AddEventHandler("service:UpdateHierarchy", function(data)
 	if Passport and Panel[Passport] then
 		if Controller.HasPermission(Passport, Panel[Passport], 1) then
 			local targetPassport = tonumber(data.passport)
-			local newHierarchy = tonumber(data.hierarchy)
-			
-			if targetPassport and newHierarchy and newHierarchy >= 1 then
-				Controller.GivePermission(targetPassport, Panel[Passport], newHierarchy)
+			local newHierarchy = data.hierarchy
+			if data.downgrade == 0 then
+				vRP.UpdateHierarchy(targetPassport, Panel[Passport])
 				Controller.Notify("verde", "Hierarquia atualizada.", "Sucesso", 5000)
-			
+				TriggerClientEvent("service:Update", source)
+			else
+				vRP.DowngradeHierarchy(targetPassport, Panel[Passport])
+				Controller.Notify("verde", "Hierarquia atualizada.", "Sucesso", 5000)
 				TriggerClientEvent("service:Update", source)
 			end
 		end
@@ -147,6 +151,7 @@ function Quantum.GetHierarchies()
 end
 
 Citizen.CreateThread(function()
+
     local orange = "^3"
     local purple = "^5"
     print(purple .. "Painel Feito Por " .. orange .. "Quantum Devs " .. purple .. "🌟")

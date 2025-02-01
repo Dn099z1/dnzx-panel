@@ -525,6 +525,29 @@ select.form-input option {
   color: var(--text);
 }
 
+
+.member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  background: var(--surface);
+}
+
+.member-avatar[src*="ui-avatars"] {
+  border: none;
+}
+
+
+.member-preview-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  background: var(--surface);
+}
 @keyframes modalFadeIn {
   from {
     opacity: 0;
