@@ -80,7 +80,7 @@ AddEventHandler("panel:Remove", function(Number)
 	if Passport and Panel[Passport] then
 		
 		if Controller.HasPermission(Passport, Panel[Passport], 1) then
-			vRP.RemovePermission(Number, Panel[Passport])
+			Controller.RemovePermission(Number, Panel[Passport])
 			Controller.Notify("amarelo", "Passaporte removido.", "Atenção", 5000)
 			TriggerClientEvent("panel:Update", source)
 		end
@@ -118,11 +118,11 @@ AddEventHandler("service:UpdateHierarchy", function(data)
 			local targetPassport = tonumber(data.passport)
 			local newHierarchy = data.hierarchy
 			if data.downgrade == 0 then
-				vRP.UpdateHierarchy(targetPassport, Panel[Passport])
+				Controller.UpdateHierarchy(targetPassport, Panel[Passport])
 				Controller.Notify("verde", "Hierarquia atualizada.", "Sucesso", 5000)
 				TriggerClientEvent("service:Update", source)
 			else
-				vRP.DowngradeHierarchy(targetPassport, Panel[Passport])
+				Controller.DowngradeHierarchy(targetPassport, Panel[Passport])
 				Controller.Notify("verde", "Hierarquia atualizada.", "Sucesso", 5000)
 				TriggerClientEvent("service:Update", source)
 			end
